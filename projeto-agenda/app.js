@@ -1,78 +1,97 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const engine = require('ejs-mate'); // ADICIONADO
+const session = require('express-session');
+const flash = require('connect-flash');
+const expressLayouts = require('express-ejs-layouts');
 
 const app = express();
-const PORT = 3000;
-
-// Configuração do ejs-mate para usar layouts
-app.engine('ejs', engine); // ADICIONADO
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+const port = 3000;
 
 // Middleware
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'segredo-jurídico',
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(flash());
 
-// Caminho para o arquivo de dados
-const dataPath = path.join(__dirname, 'data', 'appointments.json');
+// View engine e layouts
+app.use(expressLayouts);
+app.set('view engine', 'ejs');
+app.set('layout', 'layout');
 
-// Página inicial
+// Variáveis globais para todas as views
+app.use((req, res, next) => {
+  res.locals.title = 'Escritório Jurídico';
+  res.locals.mensagem = req.flash('sucesso') || [];
+  next();
+});
+
+// Banco em memória
+let posts = [
+  {
+    id: 1,
+    titulo: 'Introdução ao EJS',
+    autor: 'João Silva',
+    data: '12/05/2025',
+    conteudo: 'EJS é uma linguagem de template que permite incluir JavaScript em HTML de forma simples.'
+  }
+];
+
+let agendamentos = [];
+
+// Rotas
 app.get('/', (req, res) => {
-    res.render('index');
+  res.render('index', { posts, title: 'Início' });
 });
 
-// Página de agendamento
+app.get('/novo', (req, res) => {
+  res.render('new', { title: 'Novo Post' });
+});
+
+app.post('/post', (req, res) => {
+  const { titulo, autor, conteudo } = req.body;
+  const novoPost = {
+    id: posts.length + 1,
+    titulo,
+    autor,
+    data: new Date().toLocaleDateString('pt-BR'),
+    conteudo
+  };
+  posts.unshift(novoPost);
+  req.flash('sucesso', '✅ Post criado com sucesso!');
+  res.redirect('/');
+});
+
+app.get('/post/:id', (req, res) => {
+  const post = posts.find(p => p.id == req.params.id);
+  if (!post) return res.status(404).send('Post não encontrado');
+  res.render('post', { post, title: post.titulo });
+});
+
 app.get('/agendar', (req, res) => {
-    res.render('agendar');
+  res.render('agendar', { title: 'Agendar Consulta' });
 });
 
-// Rota para salvar o agendamento
 app.post('/agendar', (req, res) => {
-    const { nome, advogado, data, hora, recorrente } = req.body;
-
-    const novoAgendamento = {
-        id: Date.now(),
-        nome,
-        advogado,
-        data,
-        hora,
-        recorrente: recorrente === 'on'
-    };
-
-    let agendamentos = [];
-
-    if (fs.existsSync(dataPath)) {
-        const raw = fs.readFileSync(dataPath);
-        agendamentos = JSON.parse(raw);
-    }
-
-    agendamentos.push(novoAgendamento);
-    fs.writeFileSync(dataPath, JSON.stringify(agendamentos, null, 2));
-
-    res.redirect('/fila');
+  const { nome, advogado, data, hora, recorrente } = req.body;
+  agendamentos.push({
+    nome,
+    advogado,
+    data,
+    hora,
+    recorrente: recorrente === 'on'
+  });
+  req.flash('sucesso', '✅ Consulta agendada com sucesso!');
+  res.redirect('/');
 });
 
-// Página da fila de atendimento
 app.get('/fila', (req, res) => {
-    let agendamentos = [];
-
-    if (fs.existsSync(dataPath)) {
-        const raw = fs.readFileSync(dataPath);
-        agendamentos = JSON.parse(raw);
-    }
-
-    agendamentos.sort((a, b) => {
-        const dateA = new Date(`${a.data} ${a.hora}`);
-        const dateB = new Date(`${b.data} ${b.hora}`);
-        return dateA - dateB;
-    });
-
-    res.render('fila', { agendamentos });
+  res.render('fila', { agendamentos, title: 'Fila de Atendimento' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+// Iniciar servidor
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });

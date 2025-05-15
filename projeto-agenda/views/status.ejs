@@ -1,0 +1,16 @@
+<h2>Status de Agendamento</h2>
+<% if (agendamentos.length === 0) { %>
+  <p>Nenhum agendamento encontrado.</p>
+<% } else { %>
+  <ul>
+    <% agendamentos.forEach(agendamento => { %>
+      <li>
+        <strong>Nome:</strong> <%= agendamento.nome %> |
+        <strong>Advogado:</strong> <%= agendamento.advogado %> |
+        <strong>Data:</strong> <%= agendamento.data %> |
+        <strong>Hora:</strong> <%= agendamento.hora %> |
+        <strong>Recorrente:</strong> <%= agendamento.recorrente ? 'Sim' : 'Não' %>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>

@@ -1,77 +1,27 @@
 const express = require('express');
-const session = require('express-session');
-const flash = require('connect-flash');
 const expressLayouts = require('express-ejs-layouts');
+const path = require('path');
 
 const app = express();
 const port = 3000;
 
 // Middleware
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'segredo-jurídico',
-  resave: false,
-  saveUninitialized: true
-}));
-app.use(flash());
-
-// View engine e layouts
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 app.set('layout', 'layout');
 
-// Variáveis globais para todas as views
-app.use((req, res, next) => {
-  res.locals.title = 'Escritório Jurídico';
-  res.locals.mensagem = req.flash('sucesso') || [];
-  next();
-});
-
-// Banco em memória
-let posts = [
-  {
-    id: 1,
-    titulo: 'Introdução ao EJS',
-    autor: 'João Silva',
-    data: '12/05/2025',
-    conteudo: 'EJS é uma linguagem de template que permite incluir JavaScript em HTML de forma simples.'
-  }
-];
-
+// Banco em memória para agendamentos
 let agendamentos = [];
 
 // Rotas
 app.get('/', (req, res) => {
-  res.render('index', { posts, title: 'Início' });
-});
-
-app.get('/novo', (req, res) => {
-  res.render('new', { title: 'Novo Post' });
-});
-
-app.post('/post', (req, res) => {
-  const { titulo, autor, conteudo } = req.body;
-  const novoPost = {
-    id: posts.length + 1,
-    titulo,
-    autor,
-    data: new Date().toLocaleDateString('pt-BR'),
-    conteudo
-  };
-  posts.unshift(novoPost);
-  req.flash('sucesso', '✅ Post criado com sucesso!');
-  res.redirect('/');
-});
-
-app.get('/post/:id', (req, res) => {
-  const post = posts.find(p => p.id == req.params.id);
-  if (!post) return res.status(404).send('Post não encontrado');
-  res.render('post', { post, title: post.titulo });
+  res.render('index', { title: 'Início' });
 });
 
 app.get('/agendar', (req, res) => {
-  res.render('agendar', { title: 'Agendar Consulta' });
+  res.render('agendar', { title: 'Agendar Consultas' });
 });
 
 app.post('/agendar', (req, res) => {
@@ -83,13 +33,14 @@ app.post('/agendar', (req, res) => {
     hora,
     recorrente: recorrente === 'on'
   });
-  req.flash('sucesso', '✅ Consulta agendada com sucesso!');
-  res.redirect('/');
+  res.redirect('/status');
 });
 
-app.get('/fila', (req, res) => {
-  res.render('fila', { agendamentos, title: 'Fila de Atendimento' });
+app.get('/status', (req, res) => {
+  res.render('status', { title: 'Status de Agendamento', agendamentos });
 });
+
+// Outras rotas (fila, new, etc) podem ser adicionadas aqui normalmente
 
 // Iniciar servidor
 app.listen(port, () => {

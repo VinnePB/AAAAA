@@ -1,23 +1,7 @@
-<% title = 'Início' %>
-
 <div class="text-center mb-4">
-  <a href="/agendar" class="btn btn-primary me-2">Agendar Consulta</a>
-  <a href="/fila" class="btn btn-secondary me-2">Ver Fila de Atendimento</a>
-  <a href="/novo" class="btn btn-success">➕ Criar Novo Post</a>
+  <a href="/agendar" class="btn btn-primary">Agendar Consulta</a>
+  <a href="/status" class="btn btn-secondary">Status de Agendamento</a>
 </div>
 
-<% if (mensagem && mensagem.length > 0) { %>
-  <div class="alert alert-success"><%= mensagem[0] %></div>
-<% } %>
-
-<% if (posts.length === 0) { %>
-  <p class="text-muted">Nenhum post ainda.</p>
-<% } else { %>
-  <div class="list-group">
-    <% posts.forEach(post => { %>
-      <a href="/post/<%= post.id %>" class="list-group-item list-group-item-action">
-        <strong><%= post.titulo %></strong> — <%= post.autor %> <small class="text-muted">(<%= post.data %>)</small>
-      </a>
-    <% }) %>
-  </div>
-<% } %>
+<h2>Bem-vindo à Shiba Advocacia</h2>
+<p>Entre em contato conosco para agendar sua consulta ou verificar o status de seus agendamentos.</p>

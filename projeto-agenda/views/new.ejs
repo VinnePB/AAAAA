@@ -1,22 +1,19 @@
-<% title = 'Novo Post' %>
+<% title = 'Criar Novo Post' %>
 
-<h1 class="mb-4">Novo Post</h1>
+<h2>Criar Novo Post</h2>
 <form action="/post" method="POST">
   <div class="mb-3">
     <label for="titulo" class="form-label">Título</label>
     <input type="text" id="titulo" name="titulo" class="form-control" required>
   </div>
-
   <div class="mb-3">
     <label for="autor" class="form-label">Autor</label>
     <input type="text" id="autor" name="autor" class="form-control" required>
   </div>
-
   <div class="mb-3">
     <label for="conteudo" class="form-label">Conteúdo</label>
-    <textarea id="conteudo" name="conteudo" rows="8" class="form-control" required></textarea>
+    <textarea id="conteudo" name="conteudo" class="form-control" rows="5" required></textarea>
   </div>
-
-  <button type="submit" class="btn btn-success">Publicar</button>
-  <a href="/" class="btn btn-secondary ms-2">Cancelar</a>
+  <button type="submit" class="btn btn-success">Criar Post</button>
 </form>
+<a href="/" class="btn btn-secondary mt-3">Voltar</a>

@@ -3,7 +3,8 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #f6f7fb;
+  background: #e5e7eb; /* Cinza claro */
+  color: #222;
   display: flex;
   flex-direction: column;
 }
@@ -13,14 +14,14 @@ body {
   max-width: 900px;
   margin: 40px auto 0 auto;
   flex: 1;
-  background: #fff;
+  background: transparent; /* Deixe o fundo transparente na home */
   border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-  padding: 32px 24px;
+  box-shadow: none;
+  padding: 0;
 }
 
 .header {
-  background: #181c24;
+  background: #101218; /* Cor mais escura */
   color: #fff;
   width: 100%;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -66,14 +67,14 @@ body {
 }
 
 .footer {
-  background: #181c24;
+  background: #101218; /* Cor mais escura */
   color: #fff;
   text-align: center;
   padding: 1.2rem 0 1rem 0;
   margin-top: auto;
   font-size: 1rem;
   letter-spacing: 1px;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.10);
 }
 
 .btn {
@@ -136,6 +137,73 @@ input[type="checkbox"] {
 
 ul {
   padding-left: 18px;
+}
+
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  background: transparent; /* Garante que use o fundo escuro do body */
+  color: #f6f7fb; /* Texto claro */
+}
+
+.big-agendar-link {
+  text-decoration: none;
+}
+
+.big-agendar-box {
+  margin-top: 32px;
+  background: #232a36;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 40px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.big-agendar-box:hover {
+  background: #007bff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+
+.agendar-img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 18px;
+}
+
+.big-agendar-box span {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.intro-box {
+  background: #232a36;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 32px 28px 18px 28px;
+  margin-bottom: 32px;
+  color: #f6f7fb;
+  max-width: 420px;
+  width: 100%;
+}
+
+.intro-box h2 {
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.intro-box p {
+  color: #d3d7e0;
+  margin: 0;
 }
 
 @media (max-width: 600px) {

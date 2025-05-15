@@ -1,20 +1,67 @@
 <h2>Agendar Consulta</h2>
+<% if (typeof error !== 'undefined') { %>
+  <div style="color: #b00; margin-bottom: 16px;"><%= error %></div>
+<% } %>
 <form action="/agendar" method="POST">
   <div>
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required>
+    <label for="nome">Nome do Cliente:</label>
+    <input type="text" id="nome" name="nome" required value="<%= typeof nome !== 'undefined' ? nome : '' %>">
+    <% if (errors && errors.nome) { %>
+      <span style="color:#b00; font-weight:bold; font-style:italic;">*obrigatório</span>
+    <% } %>
+  </div>
+  <div>
+    <label for="cpf">CPF do Cliente:</label>
+    <input type="text" id="cpf" name="cpf" required pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}" value="<%= typeof cpf !== 'undefined' ? cpf : '' %>">
+    <% if (errors && errors.cpf) { %>
+      <span style="color:#b00; font-weight:bold; font-style:italic;">*obrigatório</span>
+      <div style="color: #b00; font-size: 0.95em;">Exemplo: 123.456.789-00</div>
+    <% } %>
+  </div>
+  <div>
+    <label for="telefone">Telefone do Cliente:</label>
+    <input
+      type="tel"
+      id="telefone"
+      name="telefone"
+      required
+      pattern="^\+55\(\d{2}\)\s?\d{4,5}-?\d{4}$"
+      value="<%= typeof telefone !== 'undefined' ? telefone : '' %>"
+      placeholder="+55(11) 91234-5678"
+    >
+    <% if (errors && errors.telefone) { %>
+      <span style="color:#b00; font-weight:bold; font-style:italic;">*obrigatório</span>
+      <div style="color: #b00; font-size: 0.95em;">Exemplo: +55(11) 91234-5678</div>
+    <% } %>
   </div>
   <div>
     <label for="advogado">Advogado:</label>
-    <input type="text" id="advogado" name="advogado" required>
+    <select id="advogado" name="advogado" required>
+      <option value="">Selecione...</option>
+      <% lawyers.forEach(function(lawyer) { %>
+        <% 
+          let indisponivel = false;
+          if (typeof agendamentos !== 'undefined' && typeof data !== 'undefined' && typeof hora !== 'undefined') {
+            indisponivel = agendamentos.some(a => 
+              a.advogado == lawyer.id && a.data === data && a.hora === hora
+            );
+          }
+        %>
+        <option value="<%= lawyer.id %>" <%= indisponivel ? 'disabled' : '' %>>
+          <%= lawyer.nome %> <%= lawyer.sobrenome %> (ID: <%= lawyer.id %>)
+          <%= indisponivel ? ' - Indisponível' : '' %>
+        </option>
+      <% }) %>
+    </select>
   </div>
   <div>
     <label for="data">Data:</label>
-    <input type="date" id="data" name="data" required>
+    <input type="date" id="data" name="data" required value="<%= typeof data !== 'undefined' ? data : '' %>">
   </div>
   <div>
     <label for="hora">Hora:</label>
-    <input type="time" id="hora" name="hora" required>
+    <input type="time" id="hora" name="hora" required min="08:00" max="18:00" step="1800" value="<%= typeof hora !== 'undefined' ? hora : '' %>">
+    <small>Horário permitido: 08:00-11:00 e 13:00-18:00</small>
   </div>
   <div>
     <label for="recorrente">Consulta Recorrente:</label>

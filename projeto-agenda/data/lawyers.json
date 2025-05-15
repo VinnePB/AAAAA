@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "nome": "Ana Souza",
+    "sobrenome": "Silva",
+    "idade": 40,
+    "cpf": "123.456.789-00"
+  },
+  {
+    "id": 2,
+    "nome": "Carlos",
+    "sobrenome": "Pereira",
+    "idade": 35,
+    "cpf": "987.654.321-00"
+  },
+  {
+    "id": 3,
+    "nome": "Marina",
+    "sobrenome": "Oliveira",
+    "idade": 29,
+    "cpf": "456.789.123-00"
+  }
+]

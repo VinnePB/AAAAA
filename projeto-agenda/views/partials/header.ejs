@@ -3,9 +3,19 @@
     <div class="navbar-container">
       <span class="logo">Shiba Advocacia</span>
       <ul class="navbar-menu">
-        <li><a href="/">Início</a></li>
-        <li><a href="/agendar">Agendar Consultas</a></li>
-        <li><a href="/status">Status de Agendamento</a></li>
+        <% if (title === 'Início') { %>
+          <!-- Nenhum link no menu da página inicial -->
+        <% } else if (title === 'Agendar Consultas') { %>
+          <li><a href="/">Início</a></li>
+          <li><a href="/status">Status de Agendamento</a></li>
+        <% } else if (title === 'Status de Agendamento') { %>
+          <li><a href="/">Início</a></li>
+          <li><a href="/agendar">Agendar Consultas</a></li>
+        <% } else { %>
+          <li><a href="/">Início</a></li>
+          <li><a href="/agendar">Agendar Consultas</a></li>
+          <li><a href="/status">Status de Agendamento</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
